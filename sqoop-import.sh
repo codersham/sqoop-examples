@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
+# Replace [URL] with the url of Mysql Server
 
 # Importing MySQl order_items table into HDFS using target dir
 #The following command will import all the records from order_items table into HDFS. It will create a new directory in HDFS #called order_items and put all the records. This command will result in error if the target dir exists
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db \
+--connect jdbc:mysql://[URL]/retail_db \
 --username sqoopuser \
 -P \
 --table order_items --target-dir order_items
@@ -13,7 +14,7 @@ sqoop import \
  # Importing MySQl order_items table into HDFS using warehouse dir
 #The following command will import all the records from order_items table into HDFS order_items-wr directory. Warehouse dir is #one level above the target dir
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db \
+--connect jdbc:mysql://[URL]/retail_db \
 --username sqoopuser \
 -P \
 --table order_items \
@@ -35,7 +36,7 @@ sqoop import \
 
 # Import data and save as text file. By default, sqoop saves date as text files
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db --username sqoopuser -P \
+--connect jdbc:mysql://[URL]/retail_db --username sqoopuser -P \
 --table order_items \
 --targer-dir /user/codersham2286/order_items \
 --as-textfile
@@ -43,7 +44,7 @@ sqoop import \
 # Import data and save as avro file.
 #This command will create .avsc file in local file system which is the metadata (in json)of the avro file. Avro files can only #be read using avro-tools
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db --username sqoopuser -P \
+--connect jdbc:mysql://[URL]/retail_db --username sqoopuser -P \
 --table order_items \
 --targer-dir /user/codersham2286/order_items_avro \
 --as-avrodatafile
@@ -51,7 +52,7 @@ sqoop import \
 
 # Import data and save as sequence file. Sequence file is hadoop compression technique, to reduce the file size
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db --username sqoopuser -P \
+--connect jdbc:mysql://[URL]/retail_db --username sqoopuser -P \
 --table order_items \
 --targer-dir /user/codersham2286/order_items_seq \
 --as-sequencefile
@@ -59,7 +60,7 @@ sqoop import \
 
 # Import data and save as parquet file. Parquet file uses columnar compression technique, to reduce the file size
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db \
+--connect jdbc:mysql://[URL]/retail_db \
 --username sqoopuser \
 -P \
 --table order_items \
@@ -71,14 +72,14 @@ sqoop import \
 
 # Option 1:Use 1 mapper explicitly-not a good option, can run into error for huge data
 sqoop import \
---connect jdbc:mysql://172.31.20.247/sqoopex --username sqoopuser -P \
+--connect jdbc:mysql://[URL]/sqoopex --username sqoopuser -P \
 --table order_items_no_pk \
 -m 1
 
 #						OR
 
 sqoop import \
---connect jdbc:mysql://172.31.20.247/sqoopex \
+--connect jdbc:mysql://[URL]/sqoopex \
 --username sqoopuser \
 -P \
 --table order_items_no_pk \
@@ -86,7 +87,7 @@ sqoop import \
 
 # Option 2: Use split by and specify a column to be used in the split
 sqoop import \
---connect jdbc:mysql://172.31.20.247/sqoopex \
+--connect jdbc:mysql://[URL]/sqoopex \
 --username sqoopuser \
 -P \
 --table order_items_no_pk \
@@ -94,7 +95,7 @@ sqoop import \
 
 # Option 3: Auto reset to one mapper, whenever there are no primary key in source table
 sqoop import \
---connect jdbc:mysql://172.31.20.247/sqoopex \
+--connect jdbc:mysql://[URL]/sqoopex \
 --username sqoopuser \
 -P \
 --table order_items_no_pk \
@@ -105,7 +106,7 @@ sqoop import \
 
 # Import with boundary query. Boundary query is used to specify min and max value of the split column. Sqoop calculate the min #and max value by default to determine number of records in each split. However, junk values in split column may make sqoop to #determine this limit incorrectly and resulting into 0 record output files. Junk values can be excluded in boundary query #while importing data
 sqoop import \
---connect jdbc:mysql://172.31.20.247/sqoopex \
+--connect jdbc:mysql://[URL]/sqoopex \
 --username sqoopuser -P \
 --table order_items_no_pk \
 --split-by order_item_id \
@@ -113,21 +114,21 @@ sqoop import \
 
 # Compression
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db --username sqoopuser -P \
+--connect jdbc:mysql://[URL]/retail_db --username sqoopuser -P \
 --table order_items \
 --delete-target-dir --compress \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec
 
 # --direct
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db --username sqoopuser -P \
+--connect jdbc:mysql://[URL]/retail_db --username sqoopuser -P \
 --table order_items \
 --delete-target-dir \
 --direct
 
 # Importing into hive table from RDBMS table with no primary key
 sqoop import \
---connect jdbc:mysql://172.31.20.247/retail_db \
+--connect jdbc:mysql://[URL]/retail_db \
 --username sqoopuser \
 -P \
 --table orders \
